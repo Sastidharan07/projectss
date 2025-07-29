@@ -1,0 +1,52 @@
+<% const title = 'Leave Applications' %>
+<%- include('../layout', { title, user, body: `
+<div class="leave-applications-page">
+    <h1>Leave Applications</h1>
+    
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Applied On</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${applications.map(app => `
+                    <tr>
+                        <td>${app.employee_name}</td>
+                        <td>${new Date(app.start_date).toLocaleDateString()}</td>
+                        <td>${new Date(app.end_date).toLocaleDateString()}</td>
+                        <td>${app.reason}</td>
+                        <td>
+                            <span class="status status-${app.status}">${app.status}</span>
+                        </td>
+                        <td>${new Date(app.created_at).toLocaleDateString()}</td>
+                        <td>
+                            ${app.status === 'pending' ? `
+                                <form method="POST" action="/admin/leave-action" style="display: inline;">
+                                    <input type="hidden" name="applicationId" value="${app.id}">
+                                    <input type="hidden" name="action" value="approved">
+                                    <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                </form>
+                                <form method="POST" action="/admin/leave-action" style="display: inline;">
+                                    <input type="hidden" name="applicationId" value="${app.id}">
+                                    <input type="hidden" name="action" value="rejected">
+                                    <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                </form>
+                            ` : 'No action needed'}
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        
+        ${applications.length === 0 ? '<p class="no-data">No leave applications found.</p>' : ''}
+    </div>
+</div>
+` }) %>

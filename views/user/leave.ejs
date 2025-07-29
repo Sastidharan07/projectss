@@ -1,0 +1,62 @@
+<% const title = 'Leave Management' %>
+<%- include('../layout', { title, user, body: `
+<div class="leave-page">
+    <h1>Leave Management</h1>
+    
+    <div class="leave-form-section">
+        <h2>Apply for Leave</h2>
+        <form method="POST" action="/user/apply-leave" class="form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" name="endDate" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="reason">Reason:</label>
+                <textarea id="reason" name="reason" rows="3" required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit Application</button>
+        </form>
+    </div>
+    
+    <div class="leave-history-section">
+        <h2>Leave Application History</h2>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Applied On</th>
+                        <th>Admin Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${applications.map(app => `
+                        <tr>
+                            <td>${new Date(app.start_date).toLocaleDateString()}</td>
+                            <td>${new Date(app.end_date).toLocaleDateString()}</td>
+                            <td>${app.reason}</td>
+                            <td><span class="status status-${app.status}">${app.status}</span></td>
+                            <td>${new Date(app.created_at).toLocaleDateString()}</td>
+                            <td>${app.admin_comment || 'N/A'}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            
+            ${applications.length === 0 ? '<p class="no-data">No leave applications found.</p>' : ''}
+        </div>
+    </div>
+</div>
+` }) %>

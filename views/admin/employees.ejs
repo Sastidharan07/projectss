@@ -1,0 +1,73 @@
+<% const title = 'Manage Employees' %>
+<%- include('../layout', { title, user, body: `
+<div class="employees-page">
+    <div class="page-header">
+        <h1>Manage Employees</h1>
+        <div class="header-actions">
+            <a href="/admin/add-employee" class="btn btn-primary">Add New Employee</a>
+            <a href="/admin/bulk-operations" class="btn btn-secondary">Bulk Operations</a>
+        </div>
+    </div>
+    
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Profile</th>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${employees.map(emp => `
+                    <tr>
+                        <td class="profile-cell">
+                            ${emp.profile_image ? `
+                                <img src="/uploads/profiles/${emp.profile_image}" alt="${emp.name}" class="employee-avatar">
+                            ` : `
+                                <div class="employee-avatar-placeholder">
+                                    ${emp.name.charAt(0).toUpperCase()}
+                                </div>
+                            `}
+                        </td>
+                        <td>${emp.id}</td>
+                        <td>${emp.username}</td>
+                        <td>${emp.name}</td>
+                        <td>${emp.email || 'N/A'}</td>
+                        <td>${emp.department || 'N/A'}</td>
+                        <td>${new Date(emp.created_at).toLocaleDateString()}</td>
+                        <td class="actions-cell">
+                            <a href="/admin/view-employee/${emp.id}" class="btn btn-sm btn-info" title="View Details">
+                                👁️ View
+                            </a>
+                            <a href="/admin/edit-employee/${emp.id}" class="btn btn-sm btn-warning" title="Edit Employee">
+                                ✏️ Edit
+                            </a>
+                            <form method="POST" action="/admin/delete-employee/${emp.id}" style="display: inline;" 
+                                  onsubmit="return confirm('Are you sure you want to delete ${emp.name}? This will also delete all their attendance and leave records.')">
+                                <button type="submit" class="btn btn-sm btn-danger" title="Delete Employee">
+                                    🗑️ Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        
+        ${employees.length === 0 ? '<p class="no-data">No employees found.</p>' : ''}
+    </div>
+    
+    <div class="employee-stats">
+        <div class="stat-card">
+            <h3>Total Employees</h3>
+            <div class="stat-number">${employees.length}</div>
+        </div>
+    </div>
+</div>
+` }) %>

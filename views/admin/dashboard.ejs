@@ -1,0 +1,32 @@
+<% const title = 'Admin Dashboard' %>
+<%- include('../layout', { title, user, body: `
+<div class="dashboard">
+    <h1>Admin Dashboard</h1>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Employees</h3>
+            <div class="stat-number">${stats.total_employees}</div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Pending Leave Applications</h3>
+            <div class="stat-number">${stats.pending_leaves}</div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Today's Attendance</h3>
+            <div class="stat-number">${stats.today_attendance}</div>
+        </div>
+    </div>
+    
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+            <a href="/admin/add-employee" class="btn btn-primary">Add New Employee</a>
+            <a href="/admin/employees" class="btn btn-secondary">Manage Employees</a>
+            <a href="/admin/leave-applications" class="btn btn-secondary">Review Leave Applications</a>
+        </div>
+    </div>
+</div>
+` }) %>

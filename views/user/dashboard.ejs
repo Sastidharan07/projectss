@@ -1,0 +1,58 @@
+<% const title = 'User Dashboard' %>
+<%- include('../layout', { title, user, body: `
+<div class="dashboard">
+    <h1>Welcome, ${user.name}</h1>
+    
+    <div class="dashboard-grid">
+        <div class="dashboard-section">
+            <h2>Recent Attendance</h2>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${attendance.map(att => `
+                            <tr>
+                                <td>${new Date(att.date).toLocaleDateString()}</td>
+                                <td><span class="status status-${att.status}">${att.status}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                ${attendance.length === 0 ? '<p class="no-data">No attendance records found.</p>' : ''}
+            </div>
+            <a href="/user/attendance" class="btn btn-primary">View All Attendance</a>
+        </div>
+        
+        <div class="dashboard-section">
+            <h2>Recent Leave Applications</h2>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${leaves.map(leave => `
+                            <tr>
+                                <td>${new Date(leave.start_date).toLocaleDateString()}</td>
+                                <td>${new Date(leave.end_date).toLocaleDateString()}</td>
+                                <td><span class="status status-${leave.status}">${leave.status}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                ${leaves.length === 0 ? '<p class="no-data">No leave applications found.</p>' : ''}
+            </div>
+            <a href="/user/leave" class="btn btn-primary">Manage Leave</a>
+        </div>
+    </div>
+</div>
+` }) %>
